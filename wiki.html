@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cobalt_launcher wiki</title>
+    <style>
+        * {box-sizing: border-box;}
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: #fafafa;
+            margin: 0;
+            padding: 0;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+       
+        header {
+            background-color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 3px rgba(0,0,0,.1);
+            transform: translateY(-20px);
+            opacity: 0;
+            animation: slideDown 0.5s ease-out 0.3s forwards;
+            position: relative;
+        }
+        .logo-text {
+            font-weight: bold;
+            font-size: 1.5em;
+            color: #0b0080;
+        }
+        
+        /* Стили для гамбургер-меню */
+        .menu-icon {
+            display: none;
+            cursor: pointer;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 25px;
+            z-index: 1001;
+        }
+        .menu-icon div {
+            width: 100%;
+            height: 3px;
+            background-color: #333;
+            transition: all 0.3s ease-in-out;
+        }
+        
+        /* Стили для меню */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100vh;
+            background-color: #fff;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+            padding: 60px 20px 20px;
+            transition: right 0.3s ease-in-out;
+        }
+        .mobile-menu.active {
+            right: 0;
+        }
+        .mobile-menu a {
+            display: block;
+            padding: 10px 0;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #eee;
+        }
+        .mobile-menu a:hover {
+            color: #0b0080;
+        }
+        .mobile-search-form {
+            margin: 20px 0;
+        }
+        .mobile-search-form input[type="search"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        .mobile-search-form button {
+            width: 100%;
+            padding: 8px;
+            background-color: #0b0080;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+        .overlay.active {
+            display: block;
+        }
+        
+        main {
+            flex-grow: 1;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        article {
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.5s ease-out forwards;
+        }
+       
+        article:nth-child(1) {
+            animation-delay: 0.4s;
+        }
+        article:nth-child(2) {
+            animation-delay: 0.6s;
+        }
+        article:nth-child(3) {
+            animation-delay: 0.8s;
+        }
+        article:nth-child(4) {
+            animation-delay: 1.0s;
+        }
+        article:nth-child(5) {
+            animation-delay: 1.2s;
+        }
+       
+        footer {
+            background-color: #fafafa;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 0.8em;
+            color: #666;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 1.5s forwards;
+        }
+        
+        @media (max-width: 768px) {
+            .menu-icon {
+                display: flex;
+            }
+            .mobile-menu {
+                display: block;
+            }
+        }
+
+        /* Keyframes for animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Стили для редактора */
+        .editor-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1100;
+        }
+        
+        .editor-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 800px;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            z-index: 1101;
+        }
+        
+        .editor-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .editor-toolbar button {
+            padding: 5px 10px;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .editor-toolbar button:hover {
+            background: #e0e0e0;
+        }
+        
+        .editor-content {
+            width: 100%;
+            min-height: 300px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .editor-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .editor-footer button {
+            padding: 5px 15px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .editor-save {
+            background: #0b0080;
+            color: white;
+            border: none;
+        }
+        
+        .editor-cancel {
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+        }
+        
+        .emoji-picker {
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            z-index: 1102;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        .emoji-picker span {
+            font-size: 20px;
+            padding: 5px;
+            cursor: pointer;
+            display: inline-block;
+        }
+        
+        .emoji-picker span:hover {
+            background: #f0f0f0;
+        }
+        
+        .link-dialog {
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            z-index: 1102;
+            display: none;
+        }
+        
+        .link-dialog input {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .image-dialog {
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            z-index: 1102;
+            display: none;
+        }
+        
+        .image-dialog input {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="menu-icon" id="menuToggle">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="logo-text"><a href="index.html" class="hover:text-gray-300">Cobalt_launcher wiki</a></div>
+    </header>
+
+    <!-- Мобильное меню -->
+    <div class="overlay" id="overlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Главное меню</a>
+        <form class="mobile-search-form" action="" method="get">
+            <input type="search" name="q" placeholder="Поиск...">
+            <button type="submit">Искать</button>
+        </form>
+        <a href="#">История Древнего Египта</a>
+        <a href="#">Жизнь и творчество Пушкина</a>
+        <a href="#">Открытия Колумба</a>
+    </div>
+
+    <main>
+        <article>
+            <h1>Добро пожаловать в Cobalt_Wiki</h1>
+            <p>Cobalt_Wiki — онлайн-энциклопедия, в которой вы можете найти многичисленную информацию о игре Minecraft.</p>
+        </article>
+        <article>
+            <h2>Исходный код:</h2>
+            <ol>
+                <li><a href="">История Древнего Египта</a></li>
+                <li><a href="">Жизнь и творчество Пушкина</a></li>
+                <li><a href="">Открытия Колумба</a></li>
+            </ol>
+        </article>
+        <article>
+            <h2>Статьи с темой "как сделать?"</h2>
+            <ol>
+                <li><a href="">История Древнего Египта</a></li>
+                <li><a href="">Жизнь и творчество Пушкина</a></li>
+                <li><a href="">Открытия Колумба</a></li>
+            </ol>
+        </article>
+        <article>
+            <h2>Статьи с темой "как сделать?"</h2>
+            <ol>
+                <li><a href="">История Древнего Египта</a></li>
+                <li><a href="">Жизнь и творчество Пушкина</a></li>
+                <li><a href="">Открытия Колумба</a></li>
+            </ol>
+        </article>
+        <article>
+            <h2>Статьи с темой "как сделать?"</h2>
+            <ol>
+                <li><a href="">История Древнего Египта</a></li>
+                <li><a href="">Жизнь и творчество Пушкина</a></li>
+                <li><a href="">Открытия Колумба</a></li>
+            </ol>
+        </article>
+    </main>
+    <footer class="bg-gray-950 py-10 text-center text-gray-400 text-sm">
+        © 2025 Atlantis Studio. Все права защищены. 
+    </footer>
+
+    <!-- HTML редактор -->
+    <div class="editor-overlay" id="editorOverlay"></div>
+    <div class="editor-modal" id="editorModal">
+        <div class="editor-toolbar">
+            <button data-command="bold"><b>B</b></button>
+            <button data-command="italic"><i>I</i></button>
+            <button data-command="underline"><u>U</u></button>
+            <button data-command="insertUnorderedList">• Список</button>
+            <button data-command="insertOrderedList">1. Список</button>
+            <button data-command="createLink">Ссылка</button>
+            <button data-command="insertImage">Изображение</button>
+            <button data-command="insertEmoji">😊 Эмодзи</button>
+            <select data-command="formatBlock">
+                <option value="p">Абзац</option>
+                <option value="h1">Заголовок 1</option>
+                <option value="h2">Заголовок 2</option>
+                <option value="h3">Заголовок 3</option>
+                <option value="h4">Заголовок 4</option>
+                <option value="h5">Заголовок 5</option>
+                <option value="h6">Заголовок 6</option>
+            </select>
+        </div>
+        <div class="editor-content" id="editorContent" contenteditable="true"></div>
+        <div class="editor-footer">
+            <button class="editor-cancel" id="editorCancel">Отмена</button>
+            <button class="editor-save" id="editorSave">Сохранить</button>
+        </div>
+    </div>
+
+    <!-- Эмодзи пикер -->
+    <div class="emoji-picker" id="emojiPicker">
+        <span>😀</span><span>😁</span><span>😂</span><span>🤣</span><span>😃</span>
+        <span>😄</span><span>😅</span><span>😆</span><span>😉</span><span>😊</span>
+        <span>😋</span><span>😎</span><span>😍</span><span>😘</span><span>😗</span>
+        <span>😙</span><span>😚</span><span>🙂</span><span>🤗</span><span>🤔</span>
+        <span>😐</span><span>😑</span><span>😶</span><span>🙄</span><span>😏</span>
+        <span>😣</span><span>😥</span><span>😮</span><span>🤐</span><span>😯</span>
+        <span>😪</span><span>😫</span><span>😴</span><span>😌</span><span>😛</span>
+        <span>😜</span><span>😝</span><span>🤤</span><span>😒</span><span>😓</span>
+        <span>😔</span><span>😕</span><span>🙃</span><span>🤑</span><span>😲</span>
+        <span>🙁</span><span>😖</span><span>😞</span><span>😟</span><span>😤</span>
+        <span>😢</span><span>😭</span><span>😦</span><span>😧</span><span>😨</span>
+        <span>😩</span><span>😬</span><span>😰</span><span>😱</span><span>😳</span>
+        <span>😵</span><span>😡</span><span>😠</span><span>😷</span><span>🤒</span>
+        <span>🤕</span><span>🤢</span><span>🤧</span><span>😇</span><span>🤠</span>
+        <span>🤡</span><span>🤥</span><span>🤓</span><span>😈</span><span>👿</span>
+    </div>
+
+    <!-- Диалог вставки ссылки -->
+    <div class="link-dialog" id="linkDialog">
+        <input type="text" id="linkUrl" placeholder="URL ссылки">
+        <input type="text" id="linkText" placeholder="Текст ссылки (необязательно)">
+        <div style="display: flex; justify-content: space-between;">
+            <button id="linkCancel">Отмена</button>
+            <button id="linkInsert">Вставить</button>
+        </div>
+    </div>
+
+    <!-- Диалог вставки изображения -->
+    <div class="image-dialog" id="imageDialog">
+        <input type="text" id="imageUrl" placeholder="URL изображения">
+        <div style="display: flex; justify-content: space-between;">
+            <button id="imageCancel">Отмена</button>
+            <button id="imageInsert">Вставить</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('overlay');
+            const menuBars = menuToggle.querySelectorAll('div');
+
+            menuToggle.addEventListener('click', function() {
+                mobileMenu.classList.toggle('active');
+                overlay.classList.toggle('active');
+                
+                // Анимация иконки меню
+                if (mobileMenu.classList.contains('active')) {
+                    menuBars[0].style.transform = 'rotate(-45deg) translate(-5px, 6px)';
+                    menuBars[1].style.opacity = '0';
+                    menuBars[2].style.transform = 'rotate(45deg) translate(-5px, -6px)';
+                } else {
+                    menuBars[0].style.transform = '';
+                    menuBars[1].style.opacity = '';
+                    menuBars[2].style.transform = '';
+                }
+            });
+
+            overlay.addEventListener('click', function() {
+                mobileMenu.classList.remove('active');
+                overlay.classList.remove('active');
+                menuBars[0].style.transform = '';
+                menuBars[1].style.opacity = '';
+                menuBars[2].style.transform = '';
+            });
+
+            // Редактор HTML
+            const editorOverlay = document.getElementById('editorOverlay');
+            const editorModal = document.getElementById('editorModal');
+            const editorContent = document.getElementById('editorContent');
+            const editorSave = document.getElementById('editorSave');
+            const editorCancel = document.getElementById('editorCancel');
+            const emojiPicker = document.getElementById('emojiPicker');
+            const linkDialog = document.getElementById('linkDialog');
+            const imageDialog = document.getElementById('imageDialog');
+            
+            // Проверка прав пользователя (здесь можно изменить на true/false для тестирования)
+            const userHasEditorRights = true; // В реальном приложении это должно проверяться на сервере
+            
+            // Показываем редактор при нажатии правой кнопки мыши
+            document.addEventListener('contextmenu', function(e) {
+                if (userHasEditorRights) {
+                    e.preventDefault();
+                    
+                    // Позиционируем редактор рядом с местом клика
+                    editorModal.style.display = 'block';
+                    editorOverlay.style.display = 'block';
+                    
+                    // Сохраняем выбранный элемент для редактирования
+                    const selectedElement = e.target;
+                    
+                    // Заполняем редактор содержимым элемента
+                    editorContent.innerHTML = selectedElement.innerHTML;
+                    
+                    // Сохраняем ссылку на элемент для последующего сохранения
+                    editorContent.dataset.targetElement = selectedElement.id || '';
+                    
+                    // Если у элемента нет ID, создаем временный
+                    if (!selectedElement.id) {
+                        const tempId = 'temp-' + Math.random().toString(36).substr(2, 9);
+                        selectedElement.id = tempId;
+                        editorContent.dataset.targetElement = tempId;
+                    }
+                }
+            });
+            
+            // Закрываем редактор при нажатии на оверлей
+            editorOverlay.addEventListener('click', function() {
+                editorModal.style.display = 'none';
+                editorOverlay.style.display = 'none';
+            });
+            
+            // Закрываем редактор при нажатии на отмену
+            editorCancel.addEventListener('click', function() {
+                editorModal.style.display = 'none';
+                editorOverlay.style.display = 'none';
+            });
+            
+            // Сохраняем изменения
+            editorSave.addEventListener('click', function() {
+                const targetElementId = editorContent.dataset.targetElement;
+                if (targetElementId) {
+                    const targetElement = document.getElementById(targetElementId);
+                    if (targetElement) {
+                        targetElement.innerHTML = editorContent.innerHTML;
+                    }
+                }
+                editorModal.style.display = 'none';
+                editorOverlay.style.display = 'none';
+            });
+            
+            // Обработка кнопок редактора
+            document.querySelectorAll('.editor-toolbar button[data-command]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const command = this.dataset.command;
+                    
+                    if (command === 'insertEmoji') {
+                        showEmojiPicker();
+                    } else if (command === 'createLink') {
+                        showLinkDialog();
+                    } else if (command === 'insertImage') {
+                        showImageDialog();
+                    } else {
+                        document.execCommand(command, false, null);
+                    }
+                });
+            });
+            
+            // Обработка выбора формата
+            document.querySelector('.editor-toolbar select[data-command]').addEventListener('change', function() {
+                document.execCommand(this.dataset.command, false, this.value);
+            });
+            
+            // Показываем пикер эмодзи
+            function showEmojiPicker() {
+                const selection = window.getSelection();
+                const range = selection.getRangeAt(0);
+                const rect = range.getBoundingClientRect();
+                
+                emojiPicker.style.display = 'block';
+                emojiPicker.style.left = rect.left + 'px';
+                emojiPicker.style.top = rect.bottom + 'px';
+                
+                // Вставляем эмодзи при клике
+                emojiPicker.querySelectorAll('span').forEach(emoji => {
+                    emoji.addEventListener('click', function() {
+                        document.execCommand('insertText', false, this.textContent);
+                        emojiPicker.style.display = 'none';
+                    });
+                });
+            }
+            
+            // Показываем диалог вставки ссылки
+            function showLinkDialog() {
+                const selection = window.getSelection();
+                const range = selection.getRangeAt(0);
+                const rect = range.getBoundingClientRect();
+                
+                linkDialog.style.display = 'block';
+                linkDialog.style.left = rect.left + 'px';
+                linkDialog.style.top = rect.bottom + 'px';
+                
+                // Очищаем поля
+                document.getElementById('linkUrl').value = '';
+                document.getElementById('linkText').value = '';
+            }
+            
+            // Показываем диалог вставки изображения
+            function showImageDialog() {
+                const selection = window.getSelection();
+                const range = selection.getRangeAt(0);
+                const rect = range.getBoundingClientRect();
+                
+                imageDialog.style.display = 'block';
+                imageDialog.style.left = rect.left + 'px';
+                imageDialog.style.top = rect.bottom + 'px';
+                
+                // Очищаем поле
+                document.getElementById('imageUrl').value = '';
+            }
+            
+            // Обработка вставки ссылки
+            document.getElementById('linkInsert').addEventListener('click', function() {
+                const url = document.getElementById('linkUrl').value;
+                const text = document.getElementById('linkText').value || url;
+                
+                if (url) {
+                    document.execCommand('createLink', false, url);
+                    
+                    // Если указан текст, заменяем его
+                    if (text !== url) {
+                        const selection = window.getSelection();
+                        if (selection.anchorNode.parentNode.nodeName === 'A') {
+                            selection.anchorNode.parentNode.textContent = text;
+                        }
+                    }
+                }
+                
+                linkDialog.style.display = 'none';
+            });
+            
+            document.getElementById('linkCancel').addEventListener('click', function() {
+                linkDialog.style.display = 'none';
+            });
+            
+            // Обработка вставки изображения
+            document.getElementById('imageInsert').addEventListener('click', function() {
+                const url = document.getElementById('imageUrl').value;
+                
+                if (url) {
+                    document.execCommand('insertImage', false, url);
+                }
+                
+                imageDialog.style.display = 'none';
+            });
+            
+            document.getElementById('imageCancel').addEventListener('click', function() {
+                imageDialog.style.display = 'none';
+            });
+            
+            // Скрываем все диалоги при клике вне их
+            document.addEventListener('click', function(e) {
+                if (!emojiPicker.contains(e.target) && e.target.dataset.command !== 'insertEmoji') {
+                    emojiPicker.style.display = 'none';
+                }
+                
+                if (!linkDialog.contains(e.target) && e.target.dataset.command !== 'createLink') {
+                    linkDialog.style.display = 'none';
+                }
+                
+                if (!imageDialog.contains(e.target) && e.target.dataset.command !== 'insertImage') {
+                    imageDialog.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+        </html>
