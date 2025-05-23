@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Minecraft Book Editor</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            font-family: 'Minecraft', monospace;
+            margin: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #2d2d2d;
+            padding: 20px;
+            border: 4px solid #555555;
+            border-radius: 5px;
+        }
+
+        .book-title {
+            width: 300px;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #404040;
+            border: 2px solid #555555;
+            color: #ffffff;
+            font-family: 'Minecraft', monospace;
+        }
+
+        .page-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .page-tab {
+            padding: 5px 10px;
+            background-color: #555555;
+            cursor: pointer;
+            border: 2px solid #3d3d3d;
+            border-radius: 3px;
+        }
+
+        .page-tab.active {
+            background-color: #6a6a6a;
+            border-color: #00ff00;
+        }
+
+        .page-editor {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .book-text {
+            width: 100%;
+            height: 300px;
+            padding: 15px;
+            background-color: #404040;
+            border: 2px solid #555555;
+            color: #ffffff;
+            font-family: 'Minecraft', monospace;
+            resize: none;
+            white-space: pre-wrap;
+        }
+
+        .char-counter {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        .formatting-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .format-btn {
+            padding: 5px 10px;
+            background-color: #555555;
+            border: 2px solid #3d3d3d;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .minecraft-btn {
+            padding: 10px 20px;
+            background-color: #555555;
+            border: 2px solid #3d3d3d;
+            color: #ffffff;
+            cursor: pointer;
+            border-radius: 3px;
+            font-family: 'Minecraft', monospace;
+        }
+
+        .minecraft-btn:hover {
+            background-color: #6a6a6a;
+            border-color: #00ff00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <input type="text" class="book-title" placeholder="Book Title" maxlength="32">
+        
+        <div class="formatting-buttons">
+            <button class="format-btn" onclick="insertFormat('§l')">Bold</button>
+            <button class="format-btn" onclick="insertFormat('§o')">Italic</button>
+            <button class="format-btn" onclick="insertFormat('§n')">Underline</button>
+            <button class="format-btn" onclick="insertFormat('§m')">Strike</button>
+            <button class="format-btn" onclick="insertFormat('§k')">Obfu</button>
+        </div>
+
+        <div class="page-tabs" id="pageTabs"></div>
+
+        <div class="page-editor">
+            <textarea class="book-text" id="editor" maxlength="256"></textarea>
+            <div class="char-counter" id="charCounter">0/256</div>
+        </div>
+
+        <div class="controls">
+            <button class="minecraft-btn" onclick="addPage()">Add Page</button>
+            <button class="minecraft-btn" onclick="removePage()">Remove Page</button>
+            <button class="minecraft-btn" onclick="copyJSON()">Copy JSON</button>
+        </div>
+    </div>
+
+  <script>
+        let currentPage = 0;
+        let pages = [""];
+        
+        function updateEditor() {
+            const editor = document.getElementById('editor');
+            editor.value = pages[currentPage];
+            updateCharCounter();
+            updateTabs();
+        }
+
+        function updateTabs() {
+            const tabsContainer = document.getElementById('pageTabs');
+            tabsContainer.innerHTML = '';
+            
+            pages.forEach((_, index) => {
+                const tab = document.createElement('div');
+                tab.className = page-tab ${index === currentPage ? 'active' : ''};
+                tab.textContent = Page ${index + 1};
+                tab.onclick = () => switchPage(index);
+                tabsContainer.appendChild(tab);
+            });
+        }
+
+        function switchPage(pageIndex) {
+            pages[currentPage] = document.getElementById('editor').value;
+            currentPage = pageIndex;
+            updateEditor();
+        }
+
+        function addPage() {
+            if (pages.length < 50) {
+                pages.push("");
+                currentPage = pages.length - 1;
+                updateEditor();
+            }
+        }
+
+        function removePage() {
+            if (pages.length > 1) {
+                pages.splice(currentPage, 1);
+                currentPage = Math.min(currentPage, pages.length - 1);
+                updateEditor();
+            }
+        }
+
+        function updateCharCounter() {
+            const text = document.getElementById('editor').value;
+            document.getElementById('charCounter').textContent = ${text.length}/256;
+        }
+
+        function insertFormat(code) {
+            const editor = document.getElementById('editor');
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            
+            editor.value = editor.value.substring(0, start) + code + 
+                            editor.value.substring(end);
+            editor.focus();
+            editor.selectionStart = start + code.length;
+            editor.selectionEnd = start + code.length;
+            pages[currentPage] = editor.value;
+            updateCharCounter();
+        }
+
+        function copyJSON() {
+            const bookData = {
+                title: document.querySelector('.book-title').value,
+                pages: pages.map(page => page.replace(/§/g, '\\u00a7'))
+            };
+            
+            navigator.clipboard.writeText(JSON.stringify(bookData, null, 2))
+                .then(() => alert('JSON copied to clipboard!'))
+                .catch(err => console.error('Failed to copy:', err));
+        }
+
+        // Инициализация
+        document.getElementById('editor').addEventListener('input', function() {
+            pages[currentPage] = this.value;
+            updateCharCounter();
+        });
+        
+        updateTabs();
+        updateEditor();
+    </script>
+</body>
+</html>
