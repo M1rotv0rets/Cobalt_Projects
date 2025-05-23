@@ -1,1 +1,218 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cobalt Projects</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    /* Стили для мини-плеера */
+    .mini-player {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 300px;
+      z-index: 1000;
+      background: #1f2937;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    .mini-player:hover {
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+    }
+    .mini-player-container {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 соотношение */
+      height: 0;
+      overflow: hidden;
+    }
+    .mini-player-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .mini-player-controls {
+      display: flex;
+      gap: 8px;
+      padding: 8px;
+      background: #111827;
+    }
+    .mini-player-input {
+      flex-grow: 1;
+      padding: 6px;
+      border: 1px solid #374151;
+      border-radius: 4px;
+      background: #1f2937;
+      color: white;
+      font-size: 12px;
+    }
+    .mini-player-btn {
+      padding: 6px 10px;
+      background-color: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .mini-player-btn:hover {
+      background-color: #dc2626;
+    }
+    .mini-player-header {
+      padding: 8px;
+      background: #111827;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .mini-player-toggle {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-white font-sans">
 
+  <header class="bg-gray-950 shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-white">Cobalt_Projects</h1>
+      <nav class="space-x-6">
+        <a href="#" class="hover:text-gray-300">Главная</a>
+        <a href="news.html" class="hover:text-gray-300">Новости</a>
+        <a href="help.html" class="hover:text-gray-300">Поддержка</a>
+        <a href="tools.html" class="hover:text-gray-300">Инструменты</a>
+        <a href="libraly.html" class="hover:text-gray-300">Библиотека</a>
+        <a href="notes.html" class="hover:text-gray-300">Заметки</a>
+        <a href="wiki.html" class="hover:text-gray-300">Вики</a>
+        <a href="launcher.html" class="hover:text-gray-300">Лаунчер</a>
+        <a href="settigs.html" class="hover:text-gray-300">Настройки</a>
+      </nav>
+    </div>
+  </header>
+
+  <section
+  class="text-center py-24 px-4 bg-cover bg-center"
+  style="background-image: url('images/pattern.png');"
+  data-aos="fade-up"
+  >
+  <div>
+    <h2 class="text-4xl sm:text-5xl font-bold mb-6 text-white">Добро пожаловать!</h2>
+  </div>
+</section>
+
+  <!-- Мини-плеер YouTube -->
+  <div class="mini-player" id="miniPlayer">
+    <div class="mini-player-header">
+      <span>YouTube Player</span>
+      <button class="mini-player-toggle" id="togglePlayer">−</button>
+    </div>
+    <div class="mini-player-container">
+      <div id="player"></div>
+    </div>
+    <div class="mini-player-controls">
+      <input type="text" class="mini-player-input" id="videoUrl" placeholder="YouTube URL" value="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+      <button class="mini-player-btn" id="playBtn">▶</button>
+    </div>
+  </div>
+
+  <footer class="bg-gray-950 py-10 text-center text-gray-400 text-sm">
+    © 2025 Atlantis Studio. Все права защищены.
+  </footer>
+
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 1000,     
+      once: true,        
+      offset: 100       
+    });
+
+    // YouTube Player API
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    let player;
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+        height: '100%',
+        width: '100%',
+        playerVars: {
+          modestbranding: 1,
+          rel: 0
+        },
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange
+        }
+      });
+    }
+
+    function onPlayerReady(event) {
+      document.getElementById('playBtn').addEventListener('click', playVideo);
+      loadVideoFromInput();
+    }
+
+    function onPlayerStateChange(event) {
+      // Можно добавить обработку событий (пауза, окончание и т.д.)
+    }
+
+    function playVideo() {
+      loadVideoFromInput();
+    }
+
+    function loadVideoFromInput() {
+      const videoUrl = document.getElementById('videoUrl').value;
+      const videoId = extractVideoId(videoUrl);
+      
+      if (videoId) {
+        player.loadVideoById(videoId);
+      } else {
+        alert("Пожалуйста, введите корректный URL YouTube видео");
+      }
+    }
+
+    function extractVideoId(url) {
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+      const match = url.match(regExp);
+      return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    // Сворачивание/разворачивание плеера
+    const togglePlayer = document.getElementById('togglePlayer');
+    const miniPlayer = document.getElementById('miniPlayer');
+    let isMinimized = false;
+
+    togglePlayer.addEventListener('click', function() {
+      if (isMinimized) {
+        miniPlayer.style.width = '300px';
+        miniPlayer.querySelector('.mini-player-container').style.display = 'block';
+        miniPlayer.querySelector('.mini-player-controls').style.display = 'flex';
+        togglePlayer.textContent = '−';
+      } else {
+        miniPlayer.style.width = '200px';
+        miniPlayer.querySelector('.mini-player-container').style.display = 'none';
+        miniPlayer.querySelector('.mini-player-controls').style.display = 'none';
+        togglePlayer.textContent = '+';
+      }
+      isMinimized = !isMinimized;
+    });
+  </script>
+</body>
+  </html>
