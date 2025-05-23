@@ -33,7 +33,35 @@
             font-weight: bold;
             font-size: 1.5em;
             color: #0b0080;
-        }  
+        }
+        .desktop-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .desktop-nav a {
+            color: #333;
+            text-decoration: none;
+        }
+        .desktop-nav a:hover {
+            color: #0b0080;
+        }
+        .desktop-search {
+            display: flex;
+        }
+        .desktop-search input[type="search"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+        }
+        .desktop-search button {
+            padding: 8px 12px;
+            background-color: #0b0080;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
         .menu-icon {
             display: none;
             cursor: pointer;
@@ -150,6 +178,9 @@
             }
             .mobile-menu {
                 display: block;
+            }
+            .desktop-nav {
+                display: none;
             }
         }
         
@@ -326,6 +357,15 @@
             <div></div>
         </div>
         <div class="logo-text"><a href="index.html" class="hover:text-gray-300">Cobalt Wiki</a></div>
+        
+        <!-- Навигация для компьютера -->
+        <div class="desktop-nav">
+            <a href="index.html">Главная страница</a>
+            <form class="desktop-search" action="" method="get">
+                <input type="search" name="q" placeholder="Поиск...">
+                <button type="submit">Искать</button>
+            </form>
+        </div>
     </header>
 
     <div class="overlay" id="overlay"></div>
@@ -334,6 +374,7 @@
         <form class="mobile-search-form" action="" method="get">
             <input type="search" name="q" placeholder="Поиск...">
             <button type="submit">Искать</button>
+        </form>
     </div>
 
     <main>
@@ -667,4 +708,4 @@
         });
     </script>
 </body>
-        </html>
+    </html>
