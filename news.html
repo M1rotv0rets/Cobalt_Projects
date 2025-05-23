@@ -10,29 +10,25 @@
     html {
       scroll-behavior: smooth;
     }
-    /* Стили для мини-плеера */
-    .mini-player {
-      position: fixed;
-      bottom: 20px;
+    /* Стили для встроенного плеера */
+    .embedded-player {
+      position: absolute;
+      top: 20px;
       right: 20px;
-      width: 300px;
-      z-index: 1000;
+      width: 320px;
       background: #1f2937;
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
+      z-index: 10;
     }
-    .mini-player:hover {
-      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
-    }
-    .mini-player-container {
+    .embedded-player-container {
       position: relative;
       padding-bottom: 56.25%; /* 16:9 соотношение */
       height: 0;
       overflow: hidden;
     }
-    .mini-player-container iframe {
+    .embedded-player-container iframe {
       position: absolute;
       top: 0;
       left: 0;
@@ -40,13 +36,13 @@
       height: 100%;
       border: none;
     }
-    .mini-player-controls {
+    .embedded-player-controls {
       display: flex;
       gap: 8px;
       padding: 8px;
       background: #111827;
     }
-    .mini-player-input {
+    .embedded-player-input {
       flex-grow: 1;
       padding: 6px;
       border: 1px solid #374151;
@@ -55,7 +51,7 @@
       color: white;
       font-size: 12px;
     }
-    .mini-player-btn {
+    .embedded-player-btn {
       padding: 6px 10px;
       background-color: #ef4444;
       color: white;
@@ -64,25 +60,18 @@
       cursor: pointer;
       font-size: 12px;
     }
-    .mini-player-btn:hover {
+    .embedded-player-btn:hover {
       background-color: #dc2626;
     }
-    .mini-player-header {
+    .embedded-player-header {
       padding: 8px;
       background: #111827;
       color: white;
       font-size: 14px;
       font-weight: bold;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
     }
-    .mini-player-toggle {
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-      font-size: 16px;
+    .main-content {
+      position: relative;
     }
   </style>
 </head>
@@ -105,29 +94,24 @@
     </div>
   </header>
 
-  <section
-  class="text-center py-24 px-4 bg-cover bg-center"
-  style="background-image: url('images/pattern.png');"
-  data-aos="fade-up"
-  >
-  <div>
-    <h2 class="text-4xl sm:text-5xl font-bold mb-6 text-white">Добро пожаловать!</h2>
-  </div>
-</section>
+  <div class="main-content max-w-7xl mx-auto px-6 py-8">
+    <!-- Встроенный YouTube плеер -->
+    <div class="embedded-player">
+      <div class="embedded-player-header">YouTube Player</div>
+      <div class="embedded-player-container">
+        <div id="player"></div>
+      </div>
+      <div class="embedded-player-controls">
+        <input type="text" class="embedded-player-input" id="videoUrl" placeholder="YouTube URL" value="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+        <button class="embedded-player-btn" id="playBtn">▶</button>
+      </div>
+    </div>
 
-  <!-- Мини-плеер YouTube -->
-  <div class="mini-player" id="miniPlayer">
-    <div class="mini-player-header">
-      <span>YouTube Player</span>
-      <button class="mini-player-toggle" id="togglePlayer">−</button>
-    </div>
-    <div class="mini-player-container">
-      <div id="player"></div>
-    </div>
-    <div class="mini-player-controls">
-      <input type="text" class="mini-player-input" id="videoUrl" placeholder="YouTube URL" value="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
-      <button class="mini-player-btn" id="playBtn">▶</button>
-    </div>
+    <section class="text-center py-24 px-4 bg-cover bg-center" style="background-image: url('images/pattern.png');" data-aos="fade-up">
+      <div>
+        <h2 class="text-4xl sm:text-5xl font-bold mb-6 text-white">Добро пожаловать!</h2>
+      </div>
+    </section>
   </div>
 
   <footer class="bg-gray-950 py-10 text-center text-gray-400 text-sm">
@@ -193,26 +177,6 @@
       const match = url.match(regExp);
       return (match && match[2].length === 11) ? match[2] : null;
     }
-
-    // Сворачивание/разворачивание плеера
-    const togglePlayer = document.getElementById('togglePlayer');
-    const miniPlayer = document.getElementById('miniPlayer');
-    let isMinimized = false;
-
-    togglePlayer.addEventListener('click', function() {
-      if (isMinimized) {
-        miniPlayer.style.width = '300px';
-        miniPlayer.querySelector('.mini-player-container').style.display = 'block';
-        miniPlayer.querySelector('.mini-player-controls').style.display = 'flex';
-        togglePlayer.textContent = '−';
-      } else {
-        miniPlayer.style.width = '200px';
-        miniPlayer.querySelector('.mini-player-container').style.display = 'none';
-        miniPlayer.querySelector('.mini-player-controls').style.display = 'none';
-        togglePlayer.textContent = '+';
-      }
-      isMinimized = !isMinimized;
-    });
   </script>
 </body>
   </html>
