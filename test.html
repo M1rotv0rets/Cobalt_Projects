@@ -2,17 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Minecraft Skin Uploader</title>
+    <title>Minecraft Skin Downloader</title>
     <style>
         body {
             background-color: #1a1a1a;
             color: #ffffff;
             font-family: 'Minecraft', Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
         }
 
         .container {
@@ -20,36 +21,38 @@
             padding: 30px;
             border: 4px solid #555;
             border-radius: 8px;
-            max-width: 800px;
+            max-width: 600px;
+            width: 90%;
             margin-top: 20px;
+            text-align: center;
         }
 
         h1 {
             color: #00ff00;
-            text-align: center;
+            margin-bottom: 30px;
             text-shadow: 2px 2px #005500;
         }
 
-        .skin-preview {
-            width: 300px;
-            height: 400px;
-            background: #404040;
-            border: 2px solid #555;
-            margin: 20px auto;
-            position: relative;
-            image-rendering: pixelated;
-        }
-
-        .upload-section {
-            text-align: center;
+        .input-group {
             margin: 20px 0;
         }
 
+        .minecraft-input {
+            padding: 12px;
+            font-size: 16px;
+            background-color: #404040;
+            border: 2px solid #555;
+            color: #fff;
+            width: 250px;
+            margin-right: 10px;
+            font-family: 'Minecraft', monospace;
+        }
+
         .minecraft-btn {
+            padding: 12px 24px;
             background-color: #555;
             border: 2px solid #3d3d3d;
             color: #fff;
-            padding: 12px 24px;
             cursor: pointer;
             font-size: 16px;
             border-radius: 4px;
@@ -61,156 +64,143 @@
             border-color: #00ff00;
         }
 
-        #skinInput {
+        .skin-preview {
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+            background-color: #404040;
+            border: 2px solid #555;
+            image-rendering: pixelated;
             display: none;
         }
 
-        .requirements {
-            background-color: #333;
-            padding: 15px;
-            border: 2px solid #444;
+        .download-btn {
+            display: none;
+            margin: 20px auto;
+        }
+
+        .loading {
+            display: none;
             margin: 20px 0;
+            color: #00ff00;
         }
 
         .error {
             color: #ff5555;
             display: none;
-            margin: 10px 0;
+            margin: 20px 0;
         }
 
-        .skin-layers {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .layer-toggle {
-            cursor: pointer;
-            padding: 8px;
-            border: 2px solid #555;
-            border-radius: 4px;
-        }
-
-        .layer-toggle.active {
-            border-color: #00ff00;
-        }
-
-        .download-sample {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        a {
-            color: #00ff00;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
+        @font-face {
+            font-family: 'Minecraft';
+            src: url('https://fonts.cdnfonts.com/s/31398/Minecraft.woff') format('woff');
         }
     </style>
 </head>
 <body>
-    <h1>Minecraft Skin Uploader</h1>
-    
     <div class="container">
-        <div class="requirements">
-            <h3>Требования к скинам:</h3>
-            <ul>
-                <li>Формат: PNG</li>
-                <li>Размер: 64x64 или 64x32 пикселей</li>
-                <li>Прозрачность для второй слоёв</li>
-                <li>Максимальный размер файла: 50 KB</li>
-            </ul>
+        <h1>Minecraft Skin Downloader</h1>
+        
+        <div class="input-group">
+            <input type="text" 
+                   class="minecraft-input" 
+                   id="usernameInput" 
+                   placeholder="Введите никнейм"
+                   maxlength="16">
+            <button class="minecraft-btn" onclick="getSkin()">Поиск</button>
         </div>
 
-        <div class="upload-section">
-            <button class="minecraft-btn" onclick="document.getElementById('skinInput').click()">
-                Выбрать скин
-            </button>
-            <input type="file" id="skinInput" accept=".png" onchange="loadSkin(event)">
-            <div class="error" id="errorMessage"></div>
-        </div>
+        <div class="loading" id="loading">Загрузка...</div>
+        <div class="error" id="error"></div>
 
-        <div class="skin-layers">
-            <div class="layer-toggle active" onclick="toggleLayer('base')">Основной слой</div>
-            <div class="layer-toggle" onclick="toggleLayer('second')">Второй слой</div>
-        </div>
-
-        <div class="skin-preview" id="skinPreview"></div>
-
-        <div class="download-sample">
-            <h3>Примеры скинов:</h3>
-            <a href="#" onclick="downloadSample('64x64')">Скачать скин 64x64</a> | 
-            <a href="#" onclick="downloadSample('64x32')">Скачать скин 64x32</a>
-        </div>
+        <img id="skinPreview" class="skin-preview" alt="Skin Preview">
+        
+        <button class="minecraft-btn download-btn" id="downloadBtn" onclick="downloadSkin()">
+            Скачать скин
+        </button>
     </div>
+
     <script>
-        function loadSkin(event) {
-            const file = event.target.files[0];
-            const error = document.getElementById('errorMessage');
-            const preview = document.getElementById('skinPreview');
-            
-            error.style.display = 'none';
-            preview.style.backgroundImage = '';
+        let currentUUID = '';
+        let skinUrl = '';
 
-            if (!file) return;
+        async function getSkin() {
+            const username = document.getElementById('usernameInput').value.trim();
+            const errorDiv = document.getElementById('error');
+            const loadingDiv = document.getElementById('loading');
+            const skinPreview = document.getElementById('skinPreview');
+            const downloadBtn = document.getElementById('downloadBtn');
 
-            // Проверка типа файла
-            if (!file.type.includes('png')) {
-                showError('Только PNG файлы разрешены!');
+            // Сброс предыдущих результатов
+            errorDiv.style.display = 'none';
+            skinPreview.style.display = 'none';
+            downloadBtn.style.display = 'none';
+
+            if (!username) {
+                showError('Введите никнейм игрока!');
                 return;
             }
 
-            // Проверка размера файла
-            if (file.size > 51200) { // 50 KB
-                showError('Файл слишком большой! Максимум 50 KB');
-                return;
-            }
+            try {
+                loadingDiv.style.display = 'block';
+                // Получение UUID
+                const uuidResponse = await fetch(
+                    https://api.mojang.com/users/profiles/minecraft/${username}
+                );
+                
+                if (!uuidResponse.ok) {
+                    throw new Error('Игрок не найден!');
+                }
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    // Проверка размеров изображения
-                    if (!(this.width === 64 && (this.height === 64 || this.height === 32))) {
-                        showError('Неправильные размеры скина!');
-                        return;
-                    }
-                    
-                    preview.style.backgroundImage = url(${e.target.result});
-                    preview.style.backgroundSize = ${this.width}px ${this.height}px;
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
+                const uuidData = await uuidResponse.json();
+                currentUUID = uuidData.id;
+
+                // Получение данных профиля
+                const profileResponse = await fetch(
+                    https://sessionserver.mojang.com/session/minecraft/profile/${currentUUID}
+                );
+                
+                if (!profileResponse.ok) {
+                    throw new Error('Ошибка получения данных профиля!');
+                }
+
+                const profileData = await profileResponse.json();
+                const skinData = profileData.properties.find(p => p.name === 'textures').value;
+                const decodedSkinData = JSON.parse(atob(skinData));
+                skinUrl = decodedSkinData.textures.SKIN.url;
+
+                // Показ превью
+                skinPreview.src = https://crafatar.com/renders/body/${currentUUID}?overlay;
+                skinPreview.style.display = 'block';
+                downloadBtn.style.display = 'block';
+            } catch (err) {
+                showError(err.message);
+            } finally {
+                loadingDiv.style.display = 'none';
+            }
         }
 
-        function toggleLayer(layer) {
-            const preview = document.getElementById('skinPreview');
-            const toggles = document.querySelectorAll('.layer-toggle');
+        function downloadSkin() {
+            if (!skinUrl) return;
             
-            toggles.forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            if (layer === 'base') {
-                preview.style.backgroundPosition = '0 0';
-            } else {
-                preview.style.backgroundPosition = '-64px 0';
-            }
+            const link = document.createElement('a');
+            link.href = skinUrl;
+            link.download = ${document.getElementById('usernameInput').value}_skin.png;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         function showError(message) {
-            const error = document.getElementById('errorMessage');
-            error.textContent = message;
-            error.style.display = 'block';
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
         }
 
-        function downloadSample(type) {
-            // Здесь должна быть реализация загрузки примеров
-            alert('Примеры скинов можно скачать с официального сайта Minecraft');
-        }
+        // Обработка Enter в поле ввода
+        document.getElementById('usernameInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') getSkin();
+        });
     </script>
 </body>
 </html>
