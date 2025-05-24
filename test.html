@@ -1,206 +1,540 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Minecraft Skin Downloader</title>
-    <style>
-        body {
-            background-color: #1a1a1a;
-            color: #ffffff;
-            font-family: 'Minecraft', Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-        }
+  <meta charset="UTF-8" />
 
-        .container {
-            background-color: #2d2d2d;
-            padding: 30px;
-            border: 4px solid #555;
-            border-radius: 8px;
-            max-width: 600px;
-            width: 90%;
-            margin-top: 20px;
-            text-align: center;
-        }
+      <title>Калькулятор зачаровании в Minecraft</title>
+      <meta name="description" content="Калькулятор зачарований для Minecraft'а" />
+      <meta name="keywords" content="Minecraft зачарования, помощь по зачарованию, создания зачарования, получение зачаровния" />
 
-        h1 {
-            color: #00ff00;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px #005500;
-        }
+      <meta property="og:title" content="Калькулятор зачаровании в Minecraft" />
+      <meta name="twitter:title" content="Калькулятор зачаровании в Minecraft" />
+      <meta itemprop="title" content="Калькулятор зачаровании в Minecraft"/>
+      <meta property="og:description" content="Калькулятор зачарований для Minecraft'а" />
+      <meta name="twitter:description" content="Калькулятор зачарований для Minecraft'а" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta property="og:type" content="website" />
+      <meta name="generator" content="Minecraft.Tools" />
 
-        .input-group {
-            margin: 20px 0;
-        }
+      <meta property="og:locale" content="en_US" />
+      <meta http-equiv="content-language" content="ru" />
 
-        .minecraft-input {
-            padding: 12px;
-            font-size: 16px;
-            background-color: #404040;
-            border: 2px solid #555;
-            color: #fff;
-            width: 250px;
-            margin-right: 10px;
-            font-family: 'Minecraft', monospace;
-        }
+      <meta property="og:site_name" content="Minecraft.Tools" />
+      <meta itemprop="name" content="Minecraft.Tools"/>
+      <meta property="og:url"  content="http://minecraft.tools/ru/enchant.php" />
+      <meta name="twitter:url" content="http://minecraft.tools/ru/enchant.php" />
 
-        .minecraft-btn {
-            padding: 12px 24px;
-            background-color: #555;
-            border: 2px solid #3d3d3d;
-            color: #fff;
-            cursor: pointer;
-            font-size: 16px;
-            border-radius: 4px;
-            transition: all 0.3s;
-        }
+      <meta property="og:image"      content="http://minecraft.tools/css/img/opengraph/enchant.jpg" />
+      <meta name="twitter:image"     content="http://minecraft.tools/css/img/opengraph/enchant.jpg" />
+      <meta name="twitter:image:src" content="http://minecraft.tools/css/img/opengraph/enchant.jpg" />
 
-        .minecraft-btn:hover {
-            background-color: #666;
-            border-color: #00ff00;
-        }
+<link rel="stylesheet" type="text/css" href="css/jquery.jqplot.min.css" />
 
-        .skin-preview {
-            width: 300px;
-            height: 300px;
-            margin: 20px auto;
-            background-color: #404040;
-            border: 2px solid #555;
-            image-rendering: pixelated;
-            display: none;
-        }
+  <link rel="stylesheet" type="text/css" href="css/min-da232d78aa81.css?1594097883" />
+  <link rel="stylesheet" type="text/css" href="css/min-a6420929183c.css?1570939704" />
+  <link rel="stylesheet" type="text/css" href="common-css/minecraft_styles.css" />  <link rel="stylesheet" href="js/alert/min-2f0bab8cf077.css?1570940960" />
+  <!--<link rel="stylesheet" href="js/alert/sweetalert2.min.css" />-->
+  <!--<link rel="stylesheet" href="js/alert/swal-forms.css">-->
 
-        .download-btn {
-            display: none;
-            margin: 20px auto;
-        }
+  <meta name="viewport" content="width=device-width" />
 
-        .loading {
-            display: none;
-            margin: 20px 0;
-            color: #00ff00;
-        }
+  <script type="text/javascript" src="js/jquery.js"></script>  <script type="text/javascript" src="js/min-90946b3a2874.js?1587917840"></script>
+  <script type="text/javascript" src="js/min-39fb14bc00a4.js?1570939703"></script>
 
-        .error {
-            color: #ff5555;
-            display: none;
-            margin: 20px 0;
-        }
+  <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico" />
 
-        @font-face {
-            font-family: 'Minecraft';
-            src: url('https://fonts.cdnfonts.com/s/31398/Minecraft.woff') format('woff');
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Minecraft Skin Downloader</h1>
-        
-        <div class="input-group">
-            <input type="text" 
-                   class="minecraft-input" 
-                   id="usernameInput" 
-                   placeholder="Введите никнейм"
-                   maxlength="16">
-            <button class="minecraft-btn" onclick="getSkin()">Поиск</button>
-        </div>
+  </head>
+<body class="ru width">
 
-        <div class="loading" id="loading">Загрузка...</div>
-        <div class="error" id="error"></div>
 
-        <img id="skinPreview" class="skin-preview" alt="Skin Preview">
-        
-        <button class="minecraft-btn download-btn" id="downloadBtn" onclick="downloadSkin()">
-            Скачать скин
-        </button>
+        <!-- POPUP LOGIN -->  
+      <a href="#x" class="login_overlay" id="se_connecter"></a>
+      <div class="box">
+        <form id="form_login" action="" method="POST">
+          <p class="seconnecter">
+            <a href="#close" class="close" title="Fermer"></a> Войти          </p>
+          <input name="login" class="login-input" placeholder="Логин" type="text"><br>
+          <input name="password" class="login-input" placeholder="Пароль" type="password"><br>
+          <div id="buttons">  
+            <input value="Войти" class="connexion" type="submit"><br>
+            <a id="mdp" href="password.php">Забыли пароль?</a>
+            <br><br>
+            <a href="create-account.php" class="creer">Зарегистрироваться</a>
+          </div>
+
+          <div class="error-login" id="error-login">
+            Неверный логин или пароль          </div>
+        </form>
+      </div>
+      <script>
+        $('#form_login').submit(function(event)
+        {
+          $('#error-login').html("");
+          $('#error-login').hide();
+          $.post(
+              "ajax/login.php",
+              $(this).serialize()
+            )
+            .done(function(data)
+            {
+              if (data.success)
+              {
+                window.location.href = "my-content.php";
+              }
+              else
+              {
+                $('#error-login').html(data.error);
+                $('#error-login').show();
+              }
+            });
+
+          try { event.preventDefault(); } catch(err) {}
+          return false;
+        });
+
+        $('.logout').click(function()
+        {
+          $.post(
+            "ajax/login.php",
+            { "disconnect": "" }
+          )
+          .done(function(data)
+          {
+            if (data.success)
+            {
+              window.location.href = "";
+            }
+          });
+        });
+      </script>
+      <!-- END OF LOGIN  -->
+  
+
+  <div id="header">
+    <div id="cadre-logo">
+      <a href="./"><div class="logo"></div></a>
     </div>
 
-    <script>
-        let currentUUID = '';
-        let skinUrl = '';
+  <div id="login">
+  <a class="myaccount" href="#se_connecter" id="logintop">Войти</a>  </div>
 
-        async function getSkin() {
-            const username = document.getElementById('usernameInput').value.trim();
-            const errorDiv = document.getElementById('error');
-            const loadingDiv = document.getElementById('loading');
-            const skinPreview = document.getElementById('skinPreview');
-            const downloadBtn = document.getElementById('downloadBtn');
 
-            // Сброс предыдущих результатов
-            errorDiv.style.display = 'none';
-            skinPreview.style.display = 'none';
-            downloadBtn.style.display = 'none';
+  <div id="lang">
+    <a href="/en/enchant.php" class=""><span class="en"></span></a>    <a href="/fr/enchant.php" class=""><span class="fr"></span></a>    <a href="/de/enchant.php" class=""><span class="de"></span></a>    <a href="/it/enchant.php" class=""><span class="it"></span></a>    <a href="/ru/enchant.php" class="selected"><span class="ru"></span></a>    <a href="/es/enchant.php" class=""><span class="es"></span></a>  </div>
+    
+  </div><!-- fin #header -->
 
-            if (!username) {
-                showError('Введите никнейм игрока!');
-                return;
-            }
+<div id="shared-gallery">
+  <a href="public-gallery.php">Контент Сообщества</a>
+</div>
+<div id="sidebar">
+  <ul>
+<li><a href="skin.php"><img class='block-small tooltip' src='img/blocs/144_03.png' alt='&lt;span style=&#039;color: #FFFF55; &#039;&gt;Голова игрока&lt;/span&gt;&lt;br&gt;' /> Скачать скин</a></li>
+<li><a href="crafting.php"><img class='block-small tooltip' src='img/blocs2/058-boite a outils.png' alt='Верстак&lt;br&gt;' /> Крафт</a></li>
+<li class="sub"><a href="custom-crafting.php"><img class='block-small tooltip' src='img/blocs2/058-boite a outils.png' alt='Верстак&lt;br&gt;' /> Пользовательский крафт</a></li>
+<li><a href="flat.php"><img class='block-small tooltip' src='img/blocs2/002-pelouse.png' alt='Дёрн&lt;br&gt;' /> Плоский мир</a></li>
+<li><a href="enchant.php"><img class='block-small tooltip' src='img/blocs/116.png' alt='Чародейский стол&lt;br&gt;' /> Калькулятор зачарований </a></li>
+<li><a href="armor.php"><img class="block-small" src="css/img/sidebar/armor_color.png" /> Цвет брони</a></li>
+<li><a href="firework.php"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -288px -384px;' alt='Фейерверк&lt;br&gt;' /> Крафт фейерверков </a></li>
+<li><a href="banner.php"><img class='block-small tooltip' src='img/blocs/banner_white.png' alt='Белый флаг&lt;br&gt;' /> Крафт баннеров</a></li>
+<li class="sub"><a href="banner-galery.php"><img class='block-small tooltip' src='img/blocs/banner_white.png' alt='Белый флаг&lt;br&gt;' /> Галерея баннеров</a></li>
+<li><a href="shield.php"><img class='block-small tooltip' src='img/blocs/442.png' alt='Щит&lt;br&gt;' /> Крафт щита</a></li>
+<li class="sub"><a href="shield-galery.php"><img class='block-small tooltip' src='img/blocs/442.png' alt='Щит&lt;br&gt;' /> Галерея щитов</a></li>
+<li><a href="custom.php"><img class='block-small tooltip' src='img/blocs2/001_00.png' alt='Камень&lt;br&gt;' /> Пользовательский мир</a></li>
+<li><a href="spawn.php"><img class='block-small tooltip' src='img/blocs/144_04.png' alt='&lt;span style=&#039;color: #FFFF55; &#039;&gt;Голова крипера&lt;/span&gt;&lt;br&gt;' /> Генератор мобов</a></li>
+<li><a href="loots.php"><img class='block-small tooltip' src='img/blocs/054.png' alt='Сундук&lt;br&gt;' /> Таблицы дропа</a></li>
+<li><a href="potion.php"><img class="block-small" src="css/img/sidebar/potion.png" /> Пользовательские зелья</a></li>
+<li><a href="beacon-color.php"><img class='block-small tooltip' src='img/blocs2/138.png' alt='&lt;span style=&#039;color: #55FFFF; &#039;&gt;Маяк&lt;/span&gt;&lt;br&gt;' /> Цвет маяка</a></li>
+<li><a href="coordinate-calculator.php"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -384px -96px;' alt='Карта&lt;br&gt;' /> Калькулятор Координат</a></li>
+<li><a href="selector.php"><img class='block-small tooltip' src='img/blocs/144_03.png' alt='&lt;span style=&#039;color: #FFFF55; &#039;&gt;Голова игрока&lt;/span&gt;&lt;br&gt;' /> Цель селектора</a></li>
+<li><a href="index-text-generator.php"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -352px -96px;' alt='Книга&lt;br&gt;' /> Текстовые генераторы</a></li>
+<li class="sub"><a href="color-code.php"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -480px -192px;' alt='Лаймовый краситель&lt;br&gt;' /> Коды цветов</a></li>
+<li class="sub"><a href="json_text.php"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -352px -352px;' alt='Книга и перо&lt;br&gt;' /> Текстовый компонет JSON</a></li>
+<li class="sub"><a href="https://colorize.fun/en/minecraft"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -512px -256px;' alt='Синий краситель&lt;br&gt;' /> Стилизованный текст</a></li>
+<li class="sub"><a href="title.php"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -320px -96px;' alt='Бумага&lt;br&gt;' /> Title генератор</a></li>
+<li class="sub"><a href="sign.php"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -320px -64px;' alt='Дубовая табличка&lt;br&gt;' /> Генератор таблички </a></li>
+<li class="sub"><a href="book.php"><img class='block-small tooltip' src='img/blocs2/enchant/x128/387.gif' alt='Завершённая книга&lt;br&gt;' /> Редактор книжки</a></li>
+<li class="sub"><a href="tellraw.php"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -352px -352px;' alt='Книга и перо&lt;br&gt;' /> Редактор /tellraw</a></li>
+<li class="sub"><a href="motd.php"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -256px -448px;' alt='&lt;span style=&#039;color: #FF55FF; &#039;&gt;Книга знаний&lt;/span&gt;&lt;br&gt;' /> Пользовательский MOTD</a></li>
+  </ul>
+</div>
+<div id="content">
+  <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<div class="fb-like" data-href="https://www.facebook.com/pages/Minecraft-Tools/1473365939575405" data-layout="box_count" data-action="like" data-show-faces="false" data-share="false"></div>  <div class="intro">
+   <h1>Зачарование в Minecraft'е</h1>
+   <h2>Калькулятор зачарований для Minecraft'а</h2>
+  </div>
 
-            try {
-                loadingDiv.style.display = 'block';
-                // Получение UUID
-                const uuidResponse = await fetch(
-                    https://api.mojang.com/users/profiles/minecraft/${username}
-                );
-                
-                if (!uuidResponse.ok) {
-                    throw new Error('Игрок не найден!');
-                }
+<!-- Minecraft.Tools - Responsive bloc thématique -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0385690535986548"
+     data-ad-slot="3004293941"
+     data-ad-format="link"></ins>
 
-                const uuidData = await uuidResponse.json();
-                currentUUID = uuidData.id;
 
-                // Получение данных профиля
-                const profileResponse = await fetch(
-                    https://sessionserver.mojang.com/session/minecraft/profile/${currentUUID}
-                );
-                
-                if (!profileResponse.ok) {
-                    throw new Error('Ошибка получения данных профиля!');
-                }
+  <script type="text/javascript">
+    $(document).ready( function()
+    {
+      $(".radio").click(function()
+      {
+        select_tool(this);
+      });
 
-                const profileData = await profileResponse.json();
-                const skinData = profileData.properties.find(p => p.name === 'textures').value;
-                const decodedSkinData = JSON.parse(atob(skinData));
-                skinUrl = decodedSkinData.textures.SKIN.url;
+      select_tool($('.enchant-objet [data-for=tool_-1]'));
 
-                // Показ превью
-                skinPreview.src = https://crafatar.com/renders/body/${currentUUID}?overlay;
-                skinPreview.style.display = 'block';
-                downloadBtn.style.display = 'block';
-            } catch (err) {
-                showError(err.message);
-            } finally {
-                loadingDiv.style.display = 'none';
-            }
-        }
+    });
 
-        function downloadSkin() {
-            if (!skinUrl) return;
-            
-            const link = document.createElement('a');
-            link.href = skinUrl;
-            link.download = ${document.getElementById('usernameInput').value}_skin.png;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
+    var tool_enchantment = {
+          '0': ['298', '302', '306', '310', '314', 'netherite_helmet', '299', '303', '307', '311', '315', 'netherite_chestplate', '300', '304', '308', '312', '316', 'netherite_leggings', '301', '305', '309', '313', '317', 'netherite_boots', 'turtle_helmet', '403'],
+      '1': ['298', '302', '306', '310', '314', 'netherite_helmet', '299', '303', '307', '311', '315', 'netherite_chestplate', '300', '304', '308', '312', '316', 'netherite_leggings', '301', '305', '309', '313', '317', 'netherite_boots', 'turtle_helmet', '403'],
+      '2': ['301', '305', '309', '313', '317', 'netherite_boots', '403'],
+      '3': ['298', '302', '306', '310', '314', 'netherite_helmet', '299', '303', '307', '311', '315', 'netherite_chestplate', '300', '304', '308', '312', '316', 'netherite_leggings', '301', '305', '309', '313', '317', 'netherite_boots', 'turtle_helmet', '403'],
+      '4': ['298', '302', '306', '310', '314', 'netherite_helmet', '299', '303', '307', '311', '315', 'netherite_chestplate', '300', '304', '308', '312', '316', 'netherite_leggings', '301', '305', '309', '313', '317', 'netherite_boots', 'turtle_helmet', '403'],
+      '5': ['298', '302', '306', '310', '314', 'netherite_helmet', 'turtle_helmet', '403'],
+      '6': ['298', '302', '306', '310', '314', 'netherite_helmet', 'turtle_helmet', '403'],
+      '7': ['299', '303', '307', '311', '315', 'netherite_chestplate', '403'],
+      '8': ['301', '305', '309', '313', '317', 'netherite_boots', '403'],
+      '9': ['', '403'],
+      '10': ['', '403'],
+      '16': ['268', '272', '267', '283', '276', 'netherite_sword', '403'],
+      '17': ['268', '272', '267', '283', '276', 'netherite_sword', '403'],
+      '18': ['268', '272', '267', '283', '276', 'netherite_sword', '403'],
+      '19': ['268', '272', '267', '283', '276', 'netherite_sword', '403'],
+      '20': ['268', '272', '267', '283', '276', 'netherite_sword', '403'],
+      '21': ['268', '272', '267', '283', '276', 'netherite_sword', '403'],
+      '22': ['268', '272', '267', '283', '276', 'netherite_sword', '403'],
+      '32': ['269', '273', '256', '284', '277', 'netherite_shovel', '270', '274', '257', '285', '278', 'netherite_pickaxe', '271', '275', '258', '286', '279', 'netherite_axe', '290', '291', '292', '294', '293', 'netherite_hoe', '403'],
+      '33': ['269', '273', '256', '284', '277', 'netherite_shovel', '270', '274', '257', '285', '278', 'netherite_pickaxe', '271', '275', '258', '286', '279', 'netherite_axe', '290', '291', '292', '294', '293', 'netherite_hoe', '403'],
+      '34': ['298', '302', '306', '310', '314', 'netherite_helmet', '299', '303', '307', '311', '315', 'netherite_chestplate', '300', '304', '308', '312', '316', 'netherite_leggings', '301', '305', '309', '313', '317', 'netherite_boots', '268', '272', '267', '283', '276', 'netherite_sword', '269', '273', '256', '284', '277', 'netherite_shovel', '270', '274', '257', '285', '278', 'netherite_pickaxe', '271', '275', '258', '286', '279', 'netherite_axe', '290', '291', '292', '294', '293', 'netherite_hoe', 'turtle_helmet', '346', '261', 'trident', 'crossbow', '403'],
+      '35': ['269', '273', '256', '284', '277', 'netherite_shovel', '270', '274', '257', '285', '278', 'netherite_pickaxe', '271', '275', '258', '286', '279', 'netherite_axe', '290', '291', '292', '294', '293', 'netherite_hoe', '403'],
+      '48': ['261', '403'],
+      '49': ['261', '403'],
+      '50': ['261', '403'],
+      '51': ['261', '403'],
+      '61': ['346', '403'],
+      '62': ['346', '403'],
+      '65': ['trident', '403'],
+      '66': ['trident', '403'],
+      '67': ['trident', '403'],
+      '68': ['trident', '403'],
+      '100': ['crossbow', '403'],
+      '101': ['crossbow', '403'],
+      '102': ['crossbow', '403'],
+      '70': ['', '403'],
+      '71': ['', '403'],
+      '103': ['', '403'],
+      '104': ['', '403'],
+    };
 
-        function showError(message) {
-            const errorDiv = document.getElementById('error');
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
-        }
+    function select_tool(label)
+    {
+      // selection du bouton
+      var parent = $(label).parents('.switch');
+      $('.radio', parent).removeClass('selected');
+      $(label).addClass('selected');
 
-        // Обработка Enter в поле ввода
-        document.getElementById('usernameInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') getSkin();
-        });
-    </script>
+      // selectionne le radio button
+      var id = $(label).attr('data-for');
+      $("input[name=tool_id]").prop('checked', false);
+      $('#' + id).prop('checked', true);
+
+
+      // get tool ID
+      var tool_id = $(label).attr("data-for").replace("tool_", "");
+
+      // recherche des enchantements compatibles
+      $.each(tool_enchantment, function( eid, etool_list )
+      {
+        var available = ($.inArray(tool_id.toString(), etool_list) >= 0); // l'outils est adapté a cette enchantement ?
+        $(".enchant-desire select[name='enchant'] option[value='" + eid + "']").prop('disabled', !available);
+      });
+    }
+
+  </script>
+
+  <div class="page-calcul-enchantements">
+
+    <form method="POST">
+      <div class="enchant-objet">
+        <h3>Предмет для зачарования :</h3>
+         
+        <p class="field switch">
+        <input type="radio" id="tool_269" class="invisible" name="tool_id" value="269" />
+<input type="radio" id="tool_273" class="invisible" name="tool_id" value="273" />
+<input type="radio" id="tool_256" class="invisible" name="tool_id" value="256" />
+<input type="radio" id="tool_277" class="invisible" name="tool_id" value="277" />
+<input type="radio" id="tool_284" class="invisible" name="tool_id" value="284" />
+<input type="radio" id="tool_netherite_shovel" class="invisible" name="tool_id" value="netherite_shovel" />
+<input type="radio" id="tool_270" class="invisible" name="tool_id" value="270" />
+<input type="radio" id="tool_274" class="invisible" name="tool_id" value="274" />
+<input type="radio" id="tool_257" class="invisible" name="tool_id" value="257" />
+<input type="radio" id="tool_278" class="invisible" name="tool_id" value="278" />
+<input type="radio" id="tool_285" class="invisible" name="tool_id" value="285" />
+<input type="radio" id="tool_netherite_pickaxe" class="invisible" name="tool_id" value="netherite_pickaxe" />
+<input type="radio" id="tool_271" class="invisible" name="tool_id" value="271" />
+<input type="radio" id="tool_275" class="invisible" name="tool_id" value="275" />
+<input type="radio" id="tool_258" class="invisible" name="tool_id" value="258" />
+<input type="radio" id="tool_279" class="invisible" name="tool_id" value="279" />
+<input type="radio" id="tool_286" class="invisible" name="tool_id" value="286" />
+<input type="radio" id="tool_netherite_axe" class="invisible" name="tool_id" value="netherite_axe" />
+<input type="radio" id="tool_290" class="invisible" name="tool_id" value="290" />
+<input type="radio" id="tool_291" class="invisible" name="tool_id" value="291" />
+<input type="radio" id="tool_292" class="invisible" name="tool_id" value="292" />
+<input type="radio" id="tool_293" class="invisible" name="tool_id" value="293" />
+<input type="radio" id="tool_294" class="invisible" name="tool_id" value="294" />
+<input type="radio" id="tool_netherite_hoe" class="invisible" name="tool_id" value="netherite_hoe" />
+<input type="radio" id="tool_268" class="invisible" name="tool_id" value="268" />
+<input type="radio" id="tool_272" class="invisible" name="tool_id" value="272" />
+<input type="radio" id="tool_267" class="invisible" name="tool_id" value="267" />
+<input type="radio" id="tool_276" class="invisible" name="tool_id" value="276" />
+<input type="radio" id="tool_283" class="invisible" name="tool_id" value="283" />
+<input type="radio" id="tool_netherite_sword" class="invisible" name="tool_id" value="netherite_sword" />
+<input type="radio" id="tool_298" class="invisible" name="tool_id" value="298" />
+<input type="radio" id="tool_302" class="invisible" name="tool_id" value="302" />
+<input type="radio" id="tool_306" class="invisible" name="tool_id" value="306" />
+<input type="radio" id="tool_310" class="invisible" name="tool_id" value="310" />
+<input type="radio" id="tool_314" class="invisible" name="tool_id" value="314" />
+<input type="radio" id="tool_netherite_helmet" class="invisible" name="tool_id" value="netherite_helmet" />
+<input type="radio" id="tool_299" class="invisible" name="tool_id" value="299" />
+<input type="radio" id="tool_303" class="invisible" name="tool_id" value="303" />
+<input type="radio" id="tool_307" class="invisible" name="tool_id" value="307" />
+<input type="radio" id="tool_311" class="invisible" name="tool_id" value="311" />
+<input type="radio" id="tool_315" class="invisible" name="tool_id" value="315" />
+<input type="radio" id="tool_netherite_chestplate" class="invisible" name="tool_id" value="netherite_chestplate" />
+<input type="radio" id="tool_300" class="invisible" name="tool_id" value="300" />
+<input type="radio" id="tool_304" class="invisible" name="tool_id" value="304" />
+<input type="radio" id="tool_308" class="invisible" name="tool_id" value="308" />
+<input type="radio" id="tool_312" class="invisible" name="tool_id" value="312" />
+<input type="radio" id="tool_316" class="invisible" name="tool_id" value="316" />
+<input type="radio" id="tool_netherite_leggings" class="invisible" name="tool_id" value="netherite_leggings" />
+<input type="radio" id="tool_301" class="invisible" name="tool_id" value="301" />
+<input type="radio" id="tool_305" class="invisible" name="tool_id" value="305" />
+<input type="radio" id="tool_309" class="invisible" name="tool_id" value="309" />
+<input type="radio" id="tool_313" class="invisible" name="tool_id" value="313" />
+<input type="radio" id="tool_317" class="invisible" name="tool_id" value="317" />
+<input type="radio" id="tool_netherite_boots" class="invisible" name="tool_id" value="netherite_boots" />
+<input type="radio" id="tool_turtle_helmet" class="invisible" name="tool_id" value="turtle_helmet" />
+<input type="radio" id="tool_261" class="invisible" name="tool_id" value="261" />
+<input type="radio" id="tool_346" class="invisible" name="tool_id" value="346" />
+<input type="radio" id="tool_trident" class="invisible" name="tool_id" value="trident" />
+<input type="radio" id="tool_crossbow" class="invisible" name="tool_id" value="crossbow" />
+<input type="radio" id="tool_403" class="invisible" name="tool_id" value="403" />
+<label data-for="tool_269" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: 0px -160px;' alt='Деревянная лопата&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+2.5 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_273" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -32px -160px;' alt='Каменная лопата&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+3.5 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_256" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -64px -160px;' alt='Железная лопата&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+3 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_277" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -96px -160px;' alt='Алмазная лопата&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+5.5 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_284" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -128px -160px;' alt='Золотая лопата&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+1 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_netherite_shovel" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -832px -448px;' alt='Незеритовая лопата&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+6.5 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_270" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: 0px -192px;' alt='Деревянная кирка&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+2 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_274" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -32px -192px;' alt='Каменная кирка&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+3 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_257" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -64px -192px;' alt='Железная кирка&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+4 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_278" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -96px -192px;' alt='Алмазная кирка&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+5 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_285" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -128px -192px;' alt='Золотая кирка&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+2 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_netherite_pickaxe" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -864px -448px;' alt='Незеритовая кирка&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+6 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_271" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: 0px -224px;' alt='Деревянный топор&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+7 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_275" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -32px -224px;' alt='Каменный топор&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+9 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_258" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -64px -224px;' alt='Железный топор&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+5 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_279" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -96px -224px;' alt='Алмазный топор&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+9 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_286" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img-item-small' style='background-position: -128px -224px;' alt='Золотой топор&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+3 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_netherite_axe" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -896px -448px;' alt='Незеритовый топор&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+10 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_290" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: 0px -256px;' alt='Деревянная мотыга&lt;br&gt;' /></label>
+<label data-for="tool_291" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -32px -256px;' alt='Каменная мотыга&lt;br&gt;' /></label>
+<label data-for="tool_292" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -64px -256px;' alt='Железная мотыга&lt;br&gt;' /></label>
+<label data-for="tool_293" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -96px -256px;' alt='Алмазная мотыга&lt;br&gt;' /></label>
+<label data-for="tool_294" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -128px -256px;' alt='Золотая мотыга&lt;br&gt;' /></label>
+<label data-for="tool_netherite_hoe" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -928px -448px;' alt='Незеритовая мотыга&lt;br&gt;' /></label>
+<label data-for="tool_268" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: 0px -128px;' alt='Деревянный меч&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+4 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_272" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -32px -128px;' alt='Каменный меч&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+5 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_267" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -64px -128px;' alt='Железный меч&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+6 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_276" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -96px -128px;' alt='Алмазный меч&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+7 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_283" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -128px -128px;' alt='Золотой меч&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+4 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_netherite_sword" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -800px -448px;' alt='Незеритовый меч&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+8 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_298" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: 0px 0px;' alt='Кожаный шлем&lt;br&gt;' /></label>
+<label data-for="tool_302" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -32px 0px;' alt='Койф&lt;br&gt;' /></label>
+<label data-for="tool_306" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -64px 0px;' alt='Железный шлем&lt;br&gt;' /></label>
+<label data-for="tool_310" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -96px 0px;' alt='Алмазный шлем&lt;br&gt;' /></label>
+<label data-for="tool_314" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -128px 0px;' alt='Золотой шлем&lt;br&gt;' /></label>
+<label data-for="tool_netherite_helmet" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -672px -448px;' alt='Незеритовый шлем&lt;br&gt;' /></label>
+<label data-for="tool_299" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: 0px -32px;' alt='Кожаная куртка&lt;br&gt;' /></label>
+<label data-for="tool_303" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -32px -32px;' alt='Кольчуга&lt;br&gt;' /></label>
+<label data-for="tool_307" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -64px -32px;' alt='Железный нагрудник&lt;br&gt;' /></label>
+<label data-for="tool_311" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -96px -32px;' alt='Алмазный нагрудник&lt;br&gt;' /></label>
+<label data-for="tool_315" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -128px -32px;' alt='Золотой нагрудник&lt;br&gt;' /></label>
+<label data-for="tool_netherite_chestplate" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -704px -448px;' alt='Незеритовый нагрудник&lt;br&gt;' /></label>
+<label data-for="tool_300" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: 0px -64px;' alt='Кожаные штаны&lt;br&gt;' /></label>
+<label data-for="tool_304" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -32px -64px;' alt='Кольчужные поножи&lt;br&gt;' /></label>
+<label data-for="tool_308" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -64px -64px;' alt='Железные поножи&lt;br&gt;' /></label>
+<label data-for="tool_312" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -96px -64px;' alt='Алмазные поножи&lt;br&gt;' /></label>
+<label data-for="tool_316" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -128px -64px;' alt='Золотые поножи&lt;br&gt;' /></label>
+<label data-for="tool_netherite_leggings" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -736px -448px;' alt='Незеритовые поножи&lt;br&gt;' /></label>
+<label data-for="tool_301" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: 0px -96px;' alt='Кожаные ботинки&lt;br&gt;' /></label>
+<label data-for="tool_305" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -32px -96px;' alt='Кольчужные ботинки&lt;br&gt;' /></label>
+<label data-for="tool_309" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -64px -96px;' alt='Железные ботинки&lt;br&gt;' /></label>
+<label data-for="tool_313" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -96px -96px;' alt='Алмазные ботинки&lt;br&gt;' /></label>
+<label data-for="tool_317" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -128px -96px;' alt='Золотые ботинки&lt;br&gt;' /></label>
+<label data-for="tool_netherite_boots" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -768px -448px;' alt='Незеритовые ботинки&lt;br&gt;' /></label>
+<label data-for="tool_turtle_helmet" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img-item-small' style='background-position: 0px -384px;' alt='Черепаший панцирь&lt;br&gt;' /></label>
+<label data-for="tool_261" class="radio"><img class='block-small tooltip' src='img/blocs/261.gif' alt='Лук&lt;br&gt;' /></label>
+<label data-for="tool_346" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -160px -128px;' alt='Удочка&lt;br&gt;' /></label>
+<label data-for="tool_trident" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img-item-small' style='background-position: -512px -448px;' alt='Трезубец&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+9 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_crossbow" class="radio"><img src='css/img/pixel.png' width='32' height='32' class='tooltip img2-item-small' style='background-position: -544px -384px;' alt='Арбалет&lt;br&gt;&lt;span class=&#039;tooltip_attack_damage&#039;&gt;+10 Attack Damage&lt;/span&gt;&lt;br/&gt;' /></label>
+<label data-for="tool_403" class="radio"><img class='block-small tooltip' src='img/blocs2/enchant/x128/403.gif' alt='&lt;span style=&#039;color: #FFFF55; &#039;&gt;Чародейская книга&lt;/span&gt;&lt;br&gt;' /></label>
+        </p>
+      </div>
+
+      <div class="float">
+
+        <div class="">
+          <h3>Версия :</h3>
+          <select name="version">
+                        <option value="1_8">Minecraft 1.8-1.10</option>
+            <option value="1_11">Minecraft 1.11-1.12</option>
+            <option value="1_13">Minecraft 1.13</option>
+            <option value="1_14">Minecraft 1.14-1.15</option>
+            <option value="1_15">Minecraft 1.15</option>
+            <option value="1_16" selected>Minecraft 1.16</option>
+          </select>
+        </div>
+        
+        <div class="enchant-desire">
+          <h3>Зачарование :</h3>
+          <select name="enchant">
+            <option value="-1" disabled selected>Выбрать зачарование</option>
+                      <option value="0">Protection</option>
+          <option value="1">Fire Protection</option>
+          <option value="2">Feather Falling</option>
+          <option value="3">Blast Protection</option>
+          <option value="4">Projectile Protection</option>
+          <option value="5">Respiration</option>
+          <option value="6">Aqua Affinity</option>
+          <option value="7">Thorns</option>
+          <option value="8">Depth Strider</option>
+          <option value="9">Frost Walker</option>
+          <option value="10">Curse of Binding</option>
+          <option value="16">Sharpness</option>
+          <option value="17">Smite</option>
+          <option value="18">Bane of Arthropods</option>
+          <option value="19">Knockback</option>
+          <option value="20">Fire Aspect</option>
+          <option value="21">Looting</option>
+          <option value="22">Sweeping Edge</option>
+          <option value="32">Efficiency</option>
+          <option value="33">Silk Touch</option>
+          <option value="34">Unbreaking</option>
+          <option value="35">Fortune</option>
+          <option value="48">Power</option>
+          <option value="49">Punch</option>
+          <option value="50">Flame</option>
+          <option value="51">Infinity</option>
+          <option value="61">Luck of the Sea</option>
+          <option value="62">Lure</option>
+          <option value="65">Loyalty</option>
+          <option value="66">Impaling</option>
+          <option value="67">Riptide</option>
+          <option value="68">Channeling</option>
+          <option value="100">Multishot</option>
+          <option value="101">Quick Charge</option>
+          <option value="102">Piercing</option>
+          <option value="70">Mending</option>
+          <option value="71">Curse of Vanishing</option>
+          <option value="103">Soul Speed</option>
+          <option value="104">Swift Sneak</option>
+          </select>
+
+        </div>
+          <input type="submit" name="valide_enchat" class="bouton" value="Поиск" />
+        <div class="enchant-exp">
+          <h3>Опыта на использование :</h3>
+          <select name="xp">
+                <option value="1"> &nbsp; &nbsp; &nbsp; &nbsp; 1&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="2"> &nbsp; &nbsp; &nbsp; &nbsp; 2&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="3"> &nbsp; &nbsp; &nbsp; &nbsp; 3&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="4"> &nbsp; &nbsp; &nbsp; &nbsp; 4&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="5"> &nbsp; &nbsp; &nbsp; &nbsp; 5&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="6"> &nbsp; &nbsp; &nbsp; &nbsp; 6&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="7"> &nbsp; &nbsp; &nbsp; &nbsp; 7&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="8"> &nbsp; &nbsp; &nbsp; &nbsp; 8&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="9"> &nbsp; &nbsp; &nbsp; &nbsp; 9&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="10"> &nbsp; &nbsp; &nbsp; &nbsp;10&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="11"> &nbsp; &nbsp; &nbsp; &nbsp;11&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="12"> &nbsp; &nbsp; &nbsp; &nbsp;12&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="13"> &nbsp; &nbsp; &nbsp; &nbsp;13&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="14"> &nbsp; &nbsp; &nbsp; &nbsp;14&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="15"> &nbsp; &nbsp; &nbsp; &nbsp;15&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="16"> &nbsp; &nbsp; &nbsp; &nbsp;16&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="17"> &nbsp; &nbsp; &nbsp; &nbsp;17&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="18"> &nbsp; &nbsp; &nbsp; &nbsp;18&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="19"> &nbsp; &nbsp; &nbsp; &nbsp;19&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="20"> &nbsp; &nbsp; &nbsp; &nbsp;20&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="21"> &nbsp; &nbsp; &nbsp; &nbsp;21&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="22"> &nbsp; &nbsp; &nbsp; &nbsp;22&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="23"> &nbsp; &nbsp; &nbsp; &nbsp;23&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="24"> &nbsp; &nbsp; &nbsp; &nbsp;24&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="25"> &nbsp; &nbsp; &nbsp; &nbsp;25&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="26"> &nbsp; &nbsp; &nbsp; &nbsp;26&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="27"> &nbsp; &nbsp; &nbsp; &nbsp;27&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="28"> &nbsp; &nbsp; &nbsp; &nbsp;28&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option value="29"> &nbsp; &nbsp; &nbsp; &nbsp;29&nbsp; &nbsp; &nbsp; &nbsp;</option>
+      <option selected value="30"> &nbsp; &nbsp; &nbsp; &nbsp;30&nbsp; &nbsp; &nbsp; &nbsp;</option>
+          </select><br/>
+          <br/>
+          <input type="submit" name="valide_xp" class="bouton" value="Поиск" />
+        </div>
+
+      </div>
+    </form>
+
+
+
+
+
+</div>
+
+
+
+
+</div><!-- fin #content -->
+
+
+<script type="text/javascript" src="js/jqplot/jquery.jqplot.min.js"></script>
+
+<script type="text/javascript" src="js/jqplot/plugins/jqplot.highlighter.min.js"></script>
+
+<script type="text/javascript" src="js/jqplot/plugins/jqplot.canvasTextRenderer.min.js"></script>
+<script type="text/javascript" src="js/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js"></script>
+<script type="text/javascript" src="js/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js"></script>
+<script type="text/javascript" src="js/jqplot/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+<script type="text/javascript" src="js/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+
+
+<script>var cookies_consent_language='en';</script><script src="js/min-06103035b7ee.js?1679545332"></script>
+<link rel="stylesheet" type="text/css" href="css/min-84e5701c8d60.css?1648617115" />
+<div id="footer">
+  <p class="copy">© Minecraft Tools: Инструменты для Minecraft от Minecraft lover ❤. <a href="credit.php">Титры</a> -- <a href="contact.php">Связаться</a> &gt;&gt; <a href="news.php">Новости & Обновления</a> &lt;&lt; ― <a class="cookie_setting_link" onclick="cc.showSettings();">Настройки куки</a></p>
+  <p>Помогите нам с <a href="site_translation.php">переводом Minecraft.tools</a> !</p>
+  <p>"Minecraft"™ торговый знак Mojang Synergies AB. Мы не имеем отношение к Mojang.</p>
+  </div>
+<script src="js/alert/sweet-alert.min.js"></script>
+<script src="js/alert/min-b836f943d1a2.js?1563289934"></script>
+<script src="js/min-8a8cc8d6792f.js?1563289619"></script>
+
+<script>
+  var sweetalert_button_text_ok = 'Принять';
+  var sweetalert_button_text_cancel = 'Отменить';
+  var sweetalert_copy_success_title = 'Копировать';
+  var sweetalert_copy_success_message = 'Команда была скопирована успешно :)';
+  var sweetalert_copy_failled_title = 'Копировать';
+  var sweetalert_copy_failled_message = 'Копирование команды провалено :-(';
+</script>
+
+
 </body>
 </html>
